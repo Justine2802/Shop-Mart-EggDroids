@@ -8,6 +8,7 @@ export default function ProductsPage() {
   const [products, setProducts] = useState([]);
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('All');
+  const [sortOrder, setSortOrder] = useState('default');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const { addToCart, cartMessage } = useCart();
@@ -34,6 +35,14 @@ export default function ProductsPage() {
     const matchesCategory = category === 'All' || product.category === category;
     return matchesSearch && matchesCategory;
   });
+  const sortedProducts = [...visibleProducts];
+  if (sortOrder === 'price-ascending') {
+    sortedProducts.sort((a, b) => Number(a.price) - Number(b.price));
+  } else if (sortOrder === 'price-descending') {
+    sortedProducts.sort((a, b) => Number(b.price) - Number(a.price));
+  } else if (sortOrder === 'name-ascending') {
+    sortedProducts.sort((a, b) => a.name.localeCompare(b.name));
+  }
 
   return (
     <section>
@@ -56,6 +65,15 @@ export default function ProductsPage() {
             {categories.map((item) => <option key={item}>{item}</option>)}
           </select>
         </label>
+        <label>
+          <span>Sort</span>
+          <select value={sortOrder} onChange={(event) => setSortOrder(event.target.value)}>
+            <option value="default">Default</option>
+            <option value="price-ascending">Price: low to high</option>
+            <option value="price-descending">Price: high to low</option>
+            <option value="name-ascending">Name: A to Z</option>
+          </select>
+        </label>
       </div>
 
       <StatusMessage>{cartMessage}</StatusMessage>
@@ -64,7 +82,7 @@ export default function ProductsPage() {
       {!loading && !error && visibleProducts.length === 0 && <StatusMessage>No products match your filters.</StatusMessage>}
 
       <div className="product-grid">
-        {visibleProducts.map((product) => (
+        {sortedProducts.map((product) => (
           <ProductCard key={product.id} product={product} onAddToCart={addToCart} />
         ))}
       </div>
