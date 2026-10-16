@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import ProductCard from '../components/ProductCard.jsx';
 import StatusMessage from '../components/StatusMessage.jsx';
 import { useCart } from '../context/CartContext.jsx';
@@ -6,34 +6,39 @@ import { api } from '../services/api.js';
 
 export default function ProductsPage() {
   const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState(['All']);
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('All');
   const [sortOrder, setSortOrder] = useState('default');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const { addToCart, cartMessage } = useCart();
+  const searchTerm = search.trim();
 
   useEffect(() => {
     let active = true;
-    api.getProducts()
-      .then((data) => active && setProducts(data.products))
-      .catch((caught) => active && setError(caught.message))
+    setLoading(true);
+    setError('');
+    api.getProducts(searchTerm)
+      .then((data) => {
+        setCategories((current) => [
+          'All',
+          ...new Set([...current.slice(1), ...data.products.map((product) => product.category)])
+        ]);
+        if (active) setProducts(data.products);
+      })
+      .catch((caught) => {
+        if (!active) return;
+        setProducts([]);
+        setError(caught.message);
+      })
       .finally(() => active && setLoading(false));
     return () => { active = false; };
-  }, []);
-
-  const categories = useMemo(
-    () => ['All', ...new Set(products.map((product) => product.category))],
-    [products]
-  );
-  const query = search.trim().toLowerCase();
+  }, [searchTerm]);
 
   const visibleProducts = products.filter((product) => {
-    const matchesSearch =
-      product.name.toLowerCase().includes(query) ||
-      product.description.toLowerCase().includes(query);
     const matchesCategory = category === 'All' || product.category === category;
-    return matchesSearch && matchesCategory;
+    return matchesCategory;
   });
   const sortedProducts = [...visibleProducts];
   if (sortOrder === 'price-ascending') {
@@ -79,13 +84,15 @@ export default function ProductsPage() {
       <StatusMessage>{cartMessage}</StatusMessage>
       {loading && <StatusMessage>Loading products…</StatusMessage>}
       {error && <StatusMessage type="error">{error} Make sure the backend is running.</StatusMessage>}
-      {!loading && !error && visibleProducts.length === 0 && <StatusMessage>No products match your filters.</StatusMessage>}
+      {!loading && !error && visibleProducts.length === 0 && <StatusMessage>No products match your search and filters.</StatusMessage>}
 
-      <div className="product-grid">
-        {sortedProducts.map((product) => (
-          <ProductCard key={product.id} product={product} onAddToCart={addToCart} />
-        ))}
-      </div>
+      {!loading && !error && (
+        <div className="product-grid">
+          {sortedProducts.map((product) => (
+            <ProductCard key={product.id} product={product} onAddToCart={addToCart} />
+          ))}
+        </div>
+      )}
     </section>
   );
 }
