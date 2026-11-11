@@ -23,6 +23,7 @@ async function request(path, { timeoutMs, ...options } = {}) {
     const error = new Error(message);
     error.status = response.status;
     error.code = data?.error?.code;
+    error.details = data?.error?.details;
     throw error;
   }
   return data;

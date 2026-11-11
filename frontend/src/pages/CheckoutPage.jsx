@@ -4,6 +4,7 @@ import StatusMessage from '../components/StatusMessage.jsx';
 import { useCart } from '../context/CartContext.jsx';
 import { api } from '../services/api.js';
 import { calculateItemSubtotal } from '../utils/cart.js';
+import { describeOrderError } from '../utils/orderErrors.js';
 
 export default function CheckoutPage() {
   const { cart, total, clearCart } = useCart();
@@ -28,7 +29,7 @@ export default function CheckoutPage() {
       setOrder(created);
       clearCart();
     } catch (caught) {
-      setError(caught.message);
+      setError(describeOrderError(caught));
     } finally {
       setSubmitting(false);
     }

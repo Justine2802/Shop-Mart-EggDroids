@@ -1,0 +1,116 @@
+
+> shopsmart-starter@1.0.0 check
+> npm run lint --workspace frontend && npm run lint --workspace backend && npm run test && npm run build
+
+
+> shopsmart-frontend@1.0.0 lint
+> eslint .
+
+
+> shopsmart-backend@1.0.0 lint
+> eslint .
+
+
+> shopsmart-starter@1.0.0 test
+> npm run test --workspace frontend && npm run test --workspace backend
+
+
+> shopsmart-frontend@1.0.0 test
+> vitest run
+
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90mC:/Shopmart/Shop-Mart-EggDroids/frontend[39m
+
+ [32m✓[39m src/utils/cart.test.js [2m([22m[2m4 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m4 passed[39m[22m[90m (4)[39m
+[2m   Start at [22m 00:10:00
+[2m   Duration [22m 1.04s[2m (transform 43ms, setup 0ms, collect 45ms, tests 4ms, environment 0ms, prepare 527ms)[22m
+
+
+> shopsmart-backend@1.0.0 test
+> node --test
+
+✔ sends the key in a header, not the URL, and returns the draft text (30.8258ms)
+✔ HTTP 429 becomes PROVIDER_RATE_LIMITED without leaking the key (0.981ms)
+✔ HTTP 5xx and auth failures become PROVIDER_UNAVAILABLE (1.1521ms)
+✔ a slow provider becomes PROVIDER_TIMEOUT (20.482ms)
+✔ a network error becomes PROVIDER_UNAVAILABLE (0.4676ms)
+✔ empty, truncated, or blocked output becomes PROVIDER_BAD_OUTPUT (1.2619ms)
+✔ createProviderFromEnv returns null without a key or when disabled (0.2318ms)
+▶ starter behaviour (kept)
+  ✔ parseBudget extracts a peso budget (0.9621ms)
+  ✔ rankProducts respects the budget (1.029ms)
+  ✔ assistant response contains traceable sources (17.2175ms)
+✔ starter behaviour (kept) (20.3096ms)
+▶ budget parsing
+  ✔ reads currency and budget wording (0.3947ms)
+  ✔ does not treat product numbers as a budget (0.256ms)
+✔ budget parsing (0.8756ms)
+▶ catalog retrieval
+  ✔ catalog match: keyboard below ₱2,000 returns only the keyboard with its real price (0.8169ms)
+  ✔ a product number is matched as text, not as a budget (0.3296ms)
+  ✔ no match: an absent category returns no products or sources (0.4488ms)
+  ✔ a related product above the budget is mentioned but not recommended (0.4814ms)
+  ✔ availability: a stock-0 product is never recommended as available (0.473ms)
+  ✔ inactive products are excluded even if passed in (0.3055ms)
+  ✔ Decimal prices are converted to numbers (0.1225ms)
+  ✔ a weak description match does not outrank a named product (0.268ms)
+✔ catalog retrieval (3.6973ms)
+▶ draft verification
+  ✔ accepts a draft grounded in the selected records (3.2151ms)
+  ✔ rejects an invented product id (0.2976ms)
+  ✔ rejects a real id that was not selected for this request (0.2306ms)
+  ✔ rejects a wrong price (0.2697ms)
+  ✔ rejects an invented specification number (0.2452ms)
+  ✔ rejects availability and commercial claims the catalog does not support (0.5286ms)
+  ✔ rejects mentioning a product that is not recommended (0.2426ms)
+  ✔ rejects malformed output (0.4327ms)
+  ✔ accepts a fenced JSON block (0.601ms)
+✔ draft verification (6.4572ms)
+▶ answerQuestion with a provider
+  ✔ verified AI draft is returned, with products and sources built from the catalog (0.9117ms)
+  ✔ the provider receives only selected public product fields (0.4403ms)
+  ✔ no match: the provider is not called (0.2118ms)
+  ✔ provider failure PROVIDER_TIMEOUT falls back to the rule-based answer (0.6345ms)
+  ✔ provider failure PROVIDER_RATE_LIMITED falls back to the rule-based answer (0.3936ms)
+  ✔ provider failure PROVIDER_UNAVAILABLE falls back to the rule-based answer (0.3098ms)
+  ✔ an unexpected provider exception still falls back (0.4058ms)
+  ✔ an invented id or price in the draft is replaced by the verified rule answer (0.4645ms)
+  ✔ no provider configured uses rules with a notice (0.3018ms)
+✔ answerQuestion with a provider (5.2406ms)
+✔ redactQuestion removes emails and phone numbers but keeps prices (0.1133ms)
+POST /api/assistant/questions 422 8.620 ms
+✔ invalid input: a question shorter than 3 characters returns HTTP 422 (152.9056ms)
+POST /api/assistant/questions 422 0.840 ms
+POST /api/assistant/questions 422 0.921 ms
+✔ invalid input: a missing or over-long question returns HTTP 422 (26.6052ms)
+✔ a valid classroom order passes validation (3.3023ms)
+✔ duplicate products fail order validation (0.4363ms)
+✔ an oversized assistant question fails validation (0.5335ms)
+ℹ tests 44
+ℹ suites 5
+ℹ pass 44
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2835.799
+
+> shopsmart-starter@1.0.0 build
+> npm run build --workspace frontend
+
+
+> shopsmart-frontend@1.0.0 build
+> vite build
+
+[36mvite v7.3.6 [32mbuilding client environment for production...[36m[39m
+transforming...
+[32m✓[39m 52 modules transformed.
+rendering chunks...
+computing gzip size...
+[2mdist/[22m[32mindex.html                 [39m[1m[2m  0.50 kB[22m[1m[22m[2m │ gzip:  0.31 kB[22m
+[2mdist/[22m[35massets/index-CFkYiLjx.css  [39m[1m[2m  5.35 kB[22m[1m[22m[2m │ gzip:  1.75 kB[22m
+[2mdist/[22m[36massets/index-Df6bq6fy.js   [39m[1m[2m274.95 kB[22m[1m[22m[2m │ gzip: 87.09 kB[22m
+[32m✓ built in 1.25s[39m

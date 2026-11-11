@@ -1,0 +1,124 @@
+
+> shopsmart-starter@1.0.0 check
+> npm run lint --workspace frontend && npm run lint --workspace backend && npm run test && npm run build
+
+
+> shopsmart-frontend@1.0.0 lint
+> eslint .
+
+
+> shopsmart-backend@1.0.0 lint
+> eslint .
+
+
+> shopsmart-starter@1.0.0 test
+> npm run test --workspace frontend && npm run test --workspace backend
+
+
+> shopsmart-frontend@1.0.0 test
+> vitest run
+
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90mC:/Shopmart/Shop-Mart-EggDroids/frontend[39m
+
+ [32m✓[39m src/utils/cart.test.js [2m([22m[2m4 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m src/utils/orderErrors.test.js [2m([22m[2m4 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m8 passed[39m[22m[90m (8)[39m
+[2m   Start at [22m 00:15:58
+[2m   Duration [22m 666ms[2m (transform 34ms, setup 0ms, collect 56ms, tests 6ms, environment 0ms, prepare 397ms)[22m
+
+
+> shopsmart-backend@1.0.0 test
+> node --test
+
+✔ sends the key in a header, not the URL, and returns the draft text (29.4422ms)
+✔ HTTP 429 becomes PROVIDER_RATE_LIMITED without leaking the key (1.7803ms)
+✔ HTTP 5xx and auth failures become PROVIDER_UNAVAILABLE (2.38ms)
+✔ a slow provider becomes PROVIDER_TIMEOUT (37.0548ms)
+✔ a network error becomes PROVIDER_UNAVAILABLE (0.7413ms)
+✔ empty, truncated, or blocked output becomes PROVIDER_BAD_OUTPUT (2.3208ms)
+✔ createProviderFromEnv returns null without a key or when disabled (0.3284ms)
+GET /api/products/99999999999 400 2.557 ms
+✔ GET /api/products/:id with an id beyond the integer range returns 400, not 500 (59.9976ms)
+✔ an order item id beyond the integer range fails validation (3.0302ms)
+POST /api/orders 422 1.412 ms
+✔ POST /api/orders with an id beyond the integer range returns 422, not 500 (40.836ms)
+✔ malformed JSON returns 400 INVALID_JSON with a customer-safe message (9.4538ms)
+✔ escapeLikePattern makes LIKE wildcards literal (0.3142ms)
+▶ starter behaviour (kept)
+  ✔ parseBudget extracts a peso budget (0.8754ms)
+  ✔ rankProducts respects the budget (1.05ms)
+  ✔ assistant response contains traceable sources (18.6353ms)
+✔ starter behaviour (kept) (21.5631ms)
+▶ budget parsing
+  ✔ reads currency and budget wording (0.3504ms)
+  ✔ does not treat product numbers as a budget (0.5665ms)
+✔ budget parsing (1.1667ms)
+▶ catalog retrieval
+  ✔ catalog match: keyboard below ₱2,000 returns only the keyboard with its real price (1.2482ms)
+  ✔ a product number is matched as text, not as a budget (0.6666ms)
+  ✔ no match: an absent category returns no products or sources (0.5725ms)
+  ✔ a related product above the budget is mentioned but not recommended (0.6811ms)
+  ✔ availability: a stock-0 product is never recommended as available (0.5858ms)
+  ✔ inactive products are excluded even if passed in (0.3142ms)
+  ✔ Decimal prices are converted to numbers (0.2664ms)
+  ✔ a weak description match does not outrank a named product (0.333ms)
+✔ catalog retrieval (5.2796ms)
+▶ draft verification
+  ✔ accepts a draft grounded in the selected records (3.3042ms)
+  ✔ rejects an invented product id (0.4131ms)
+  ✔ rejects a real id that was not selected for this request (0.2674ms)
+  ✔ rejects a wrong price (0.1977ms)
+  ✔ rejects an invented specification number (0.1987ms)
+  ✔ rejects availability and commercial claims the catalog does not support (0.6794ms)
+  ✔ rejects mentioning a product that is not recommended (0.253ms)
+  ✔ rejects malformed output (0.5616ms)
+  ✔ accepts a fenced JSON block (0.4846ms)
+✔ draft verification (6.7649ms)
+▶ answerQuestion with a provider
+  ✔ verified AI draft is returned, with products and sources built from the catalog (1.1471ms)
+  ✔ the provider receives only selected public product fields (0.4672ms)
+  ✔ no match: the provider is not called (0.2069ms)
+  ✔ provider failure PROVIDER_TIMEOUT falls back to the rule-based answer (2.1565ms)
+  ✔ provider failure PROVIDER_RATE_LIMITED falls back to the rule-based answer (0.3876ms)
+  ✔ provider failure PROVIDER_UNAVAILABLE falls back to the rule-based answer (0.4203ms)
+  ✔ an unexpected provider exception still falls back (0.6078ms)
+  ✔ an invented id or price in the draft is replaced by the verified rule answer (0.5123ms)
+  ✔ no provider configured uses rules with a notice (0.3116ms)
+✔ answerQuestion with a provider (6.5291ms)
+✔ redactQuestion removes emails and phone numbers but keeps prices (0.1272ms)
+POST /api/assistant/questions 422 9.459 ms
+✔ invalid input: a question shorter than 3 characters returns HTTP 422 (96.3314ms)
+POST /api/assistant/questions 422 1.063 ms
+POST /api/assistant/questions 422 1.542 ms
+✔ invalid input: a missing or over-long question returns HTTP 422 (30.1297ms)
+✔ a valid classroom order passes validation (4.4536ms)
+✔ duplicate products fail order validation (0.6574ms)
+✔ an oversized assistant question fails validation (0.5551ms)
+ℹ tests 49
+ℹ suites 5
+ℹ pass 49
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 745.9402
+
+> shopsmart-starter@1.0.0 build
+> npm run build --workspace frontend
+
+
+> shopsmart-frontend@1.0.0 build
+> vite build
+
+[36mvite v7.3.6 [32mbuilding client environment for production...[36m[39m
+transforming...
+[32m✓[39m 53 modules transformed.
+rendering chunks...
+computing gzip size...
+[2mdist/[22m[32mindex.html                 [39m[1m[2m  0.50 kB[22m[1m[22m[2m │ gzip:  0.31 kB[22m
+[2mdist/[22m[35massets/index-CFkYiLjx.css  [39m[1m[2m  5.35 kB[22m[1m[22m[2m │ gzip:  1.75 kB[22m
+[2mdist/[22m[36massets/index-D_O8yuTa.js   [39m[1m[2m275.47 kB[22m[1m[22m[2m │ gzip: 87.31 kB[22m
+[32m✓ built in 1.12s[39m
