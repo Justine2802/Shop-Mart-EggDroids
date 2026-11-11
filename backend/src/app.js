@@ -10,6 +10,9 @@ import assistantRouter from './routes/assistant.js';
 export function createApp() {
   const app = express();
   app.disable('x-powered-by');
+  // Hosted platforms (e.g. Render) sit behind one reverse proxy. Trust its X-Forwarded-For
+  // so express-rate-limit counts real client IPs. Off locally, where the header could be spoofed.
+  if (process.env.NODE_ENV === 'production') app.set('trust proxy', 1);
   app.use(helmet());
   app.use(cors({ origin: process.env.FRONTEND_URL || 'http://localhost:5173' }));
   // Assign the request id before parsing the body, so body errors can be traced too.
