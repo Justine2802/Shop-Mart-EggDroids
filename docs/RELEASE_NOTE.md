@@ -1,8 +1,11 @@
-# ShopSmart release note: local release candidate
+# ShopSmart release note: release candidate on private staging
 
-- **Version:** 1.0.1-rc1. Based on commit `5025e85` (`feature/grounded-assistant`) plus the quality fixes in this submission. Record the final commit hash after committing.
+- **Version:** 1.0.1-rc1. Commits `59f4904` (quality fixes and docs) and `c293c5a` (trust Render's proxy in production), branch `feature/grounded-assistant`.
 - **Date:** 2026-11-12
-- **Deployment status:** **Local release candidate only.** No hosting or database was approved, so **live staging was not completed**. See [DEPLOYMENT_PLAN.md](DEPLOYMENT_PLAN.md) for the planned layout.
+- **Deployment status:** **Private staging on Render**, smoke test passed on 2026-11-12 (see "Staging smoke test" below). Live AI drafting is **not** enabled on staging, because no `GEMINI_API_KEY` is set there; the assistant answers from catalog rules.
+  - Frontend: https://shop-mart-eggdroids-1.onrender.com
+  - API health: https://shop-mart-eggdroids.onrender.com/api/health
+  - Layout and configuration: [DEPLOYMENT_PLAN.md](DEPLOYMENT_PLAN.md)
 
 ## Verified working features
 
@@ -34,7 +37,8 @@ There are 9 new regression tests. `npm run check` passes: lint, 8 frontend tests
 - **Cart is not persisted.** A page refresh empties it.
 - **The cart stock figure can be stale.** The server still prevents overselling.
 - **Multi-word search** ("usb lamp") matches the whole phrase only.
-- **Rate limiting** needs `trust proxy` before any hosted deployment (see the deployment plan).
+- **Render free plan:** the API sleeps when idle, so the first request after a pause can take up to about a minute. Open `/api/health` before a demo.
+- **Staging is reachable by anyone with the URL** and has no sign-in. Share the URL privately and use fictional data only.
 
 ## Local startup for an evaluator
 
@@ -65,10 +69,27 @@ On 2026-11-12, after the fixes:
 | Secrets | Only `.env.example` files are tracked. `frontend/dist` contains no key, `DATABASE_URL` or password, only the public `http://localhost:3000/api` |
 | Privacy | Only fictional names and `@example.com` emails were used |
 
+## Staging smoke test
+
+Run on 2026-11-12 at about 17:30 UTC against the Render URLs above, with fictional data only.
+
+| Check | Result |
+| --- | --- |
+| `GET /api/health` | `{"status":"ok"}`, HTTP 200 |
+| Frontend reaches the intended API | The deployed bundle calls `https://shop-mart-eggdroids.onrender.com/api`, not `localhost`. Products load: 6 cards |
+| Search | "keyboard" → 1 product; `%` → none (DEFECT-04 fix is live) |
+| Error handling | Product id `99999999999` → 400; malformed JSON → 400 `INVALID_JSON` with `traceId` |
+| Cart → checkout | USB-C Study Lamp ×1. `juan@localhost` rejected with "Email address: enter a valid email address…". Corrected email → **order #1, ₱900.00** ([screenshot](evidence/staging-checkout-order-1.jpg)). Lamp stock 10 → 9 in the database |
+| Assistant | "I need a webcam under 1500 pesos" → 1080p Webcam ₱1,450 with source; "Do you sell drones?" → honest no match. Mode `rules`, notice "AI drafting is not configured on this server…" |
+| CORS | API answers with `Access-Control-Allow-Origin: https://shop-mart-eggdroids-1.onrender.com` only |
+| SPA reload | `/cart` returns 200 (rewrite works) |
+| Orders privacy | `GET /api/orders` → 404; no route returns customer records |
+| Secrets | The deployed JS bundle contains no key, `DATABASE_URL` or Postgres URL. `DATABASE_URL` is set only in the Render API service settings |
+
 ## Team record
 
 | Member | Test run | Contribution | Issue they can explain |
 | --- | --- | --- | --- |
-| Calma, Wendy | _e.g. T2 Cart totals_ | _…_ | _e.g. L2 stale cart stock vs. the server stock check_ |
-| Esguerra, Justine | _e.g. T3 Checkout_ | _…_ | _e.g. DEFECT-01 generic validation message_ |
-| Magar, Harman | _e.g. T6 Failure / AI outage_ | _…_ | _e.g. DEFECT-02 INTEGER overflow → 500_ |
+| Calma, Wendy | T2 Cart: add, +/−, typed quantity above stock, remove; totals ₱3,550 → ₱9,350 → ₱8,700. T4 Stock conflict (409, cart unchanged) | Recorded the test results in the test record. Fixed DEFECT-04 (search wildcards `%` and `_`) | L2: the cart keeps the stock figure from when an item was added, but the server re-checks stock in a transaction, so overselling cannot happen |
+| Esguerra, Justine | T3 Checkout with valid and invalid details (`juan@localhost` rejected, then orders #6 and #7). Staging smoke test on Render | Fixed DEFECT-01 (checkout names the rejected field). Deployed to Render (static site, web service, Postgres) and added `trust proxy` for production | DEFECT-01: the browser accepts `juan@localhost` as an email, but the server's validator does not, so the page must show the server's field errors |
+| Magar, Harman | T5 Assistant questions and T6 Failure: AI provider outage fallback and API stopped | Fixed DEFECT-02 (ids beyond the INTEGER range → 400/422 instead of 500) and DEFECT-03 (`INVALID_JSON`). Wrote the deployment plan and diagram | DEFECT-02: `99999999999` is larger than PostgreSQL's INTEGER maximum (2,147,483,647), so Prisma failed with a 500 until the validator capped it |

@@ -1,6 +1,14 @@
 # ShopSmart deployment plan (private staging)
 
-**Status:** this is a plan. No hosting was approved for this activity, so the release is **local only**. The platform names below are an example layout. Check each command against the approved platform's current documentation before using it.
+**Status:** deployed to **private staging on Render** on 2026-11-12, using Render as the static host, the API host and the database host. The smoke test results are in [RELEASE_NOTE.md](RELEASE_NOTE.md).
+
+| Service | Render URL |
+| --- | --- |
+| Static Site (Vite `dist/`) | https://shop-mart-eggdroids-1.onrender.com |
+| Web Service (Express API) | https://shop-mart-eggdroids.onrender.com (health: `/api/health`) |
+| PostgreSQL | Render Postgres, connected through `DATABASE_URL` in the API's environment settings (not shown here) |
+
+The placeholders `<static-host>` and `<api-host>` below correspond to these URLs.
 
 ## Architecture
 
@@ -93,7 +101,7 @@ Access is limited to team members and the instructor, behind the host's password
 
 ## Known deployment risks to fix before staging
 
-- **Rate limiting behind a proxy.** Hosted platforms put the API behind a reverse proxy, but `app.js` does not set `app.set('trust proxy', 1)`. As a result, `express-rate-limit` either warns about `X-Forwarded-For` or counts every visitor as the same IP, so 20 assistant questions per minute would be shared by everyone. Add the setting, with the hop count the platform documents, when deploying.
+- **Rate limiting behind a proxy (resolved in `c293c5a`).** Render puts the API behind a reverse proxy. `app.js` now sets `app.set('trust proxy', 1)` when `NODE_ENV=production`, so `express-rate-limit` counts real client IPs instead of treating every visitor as one.
 - **No authentication on `POST /api/orders`.** This is acceptable only for a private staging app that uses fictional data.
 
 ## Staging smoke test (to repeat on real URLs)
