@@ -1,10 +1,12 @@
 import { Router } from 'express';
 import { prisma } from '../lib/prisma.js';
+import { escapeLikePattern } from '../lib/search.js';
+import { MAX_DB_INT } from '../validators/schemas.js';
 const router = Router();
 
 router.get('/', async (request, response, next) => {
   try {
-    const search = String(request.query.search || '').trim();
+    const search = escapeLikePattern(String(request.query.search || '').trim());
     const products = await prisma.product.findMany({
       where: {
         active: true,
@@ -24,7 +26,7 @@ router.get('/', async (request, response, next) => {
 router.get('/:id', async (request, response, next) => {
   try {
     const id = Number(request.params.id);
-    if (!Number.isInteger(id) || id < 1) return response.status(400).json({ error: { code: 'INVALID_PRODUCT_ID', message: 'Product ID must be a positive integer.' } });
+    if (!Number.isInteger(id) || id < 1 || id > MAX_DB_INT) return response.status(400).json({ error: { code: 'INVALID_PRODUCT_ID', message: 'Product ID must be a positive integer.' } });
     const product = await prisma.product.findFirst({ where: { id, active: true } });
     if (!product) return response.status(404).json({ error: { code: 'PRODUCT_NOT_FOUND', message: 'Product could not be found.' } });
     response.json({ ...product, price: Number(product.price) });

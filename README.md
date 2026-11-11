@@ -323,3 +323,10 @@ Confirm that the front end uses http://localhost:5173 and that `FRONTEND_URL=htt
 | `npm run db:studio` | Open the Prisma database viewer |
 
 Read `docs/TEACHING_ROADMAP.md` for the weekly improvement plan.
+
+## Quality and release documents
+
+- `docs/RELEASE_NOTE.md`: what works, known limitations, local startup and the final smoke test
+- `docs/TEST_RECORD.md`: customer-journey and failure tests, defects and fixes
+- `docs/DEPLOYMENT_PLAN.md`: architecture diagram, environment variables and migration plan
+- `docs/evidence/`: `npm run check` logs and screenshots

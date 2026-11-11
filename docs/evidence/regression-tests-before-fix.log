@@ -1,0 +1,237 @@
+
+> shopsmart-frontend@1.0.0 test
+> vitest run
+
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90mC:/Shopmart/Shop-Mart-EggDroids/frontend[39m
+
+ [32m✓[39m src/utils/cart.test.js [2m([22m[2m4 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [31m❯[39m src/utils/orderErrors.test.js [2m([22m[2m4 tests[22m[2m | [22m[31m3 failed[39m[2m)[22m[32m 12[2mms[22m[39m
+[31m   [31m×[31m describeOrderError[2m > [22mnames the rejected customer fields[39m[32m 8[2mms[22m[39m
+[31m     → expected 'Check the customer and cart informati…' to be 'Check the customer and cart informati…' // Object.is equality[39m
+[31m   [31m×[31m describeOrderError[2m > [22mlists several fields in form order[39m[32m 1[2mms[22m[39m
+[31m     → expected -1 to be less than -1[39m
+[31m   [31m×[31m describeOrderError[2m > [22mdescribes a cart problem[39m[32m 1[2mms[22m[39m
+[31m     → expected 'Check the customer and cart informati…' to contain 'Cart:'[39m
+   [32m✓[39m describeOrderError[2m > [22mkeeps other server messages unchanged[32m 0[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 3 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/utils/orderErrors.test.js[2m > [22mdescribeOrderError[2m > [22mnames the rejected customer fields
+[31m[1mAssertionError[22m: expected 'Check the customer and cart informati…' to be 'Check the customer and cart informati…' // Object.is equality[39m
+
+Expected: [32m"Check the customer and cart information.[7m Email address: enter a valid email address such as name@example.com.[27m"[39m
+Received: [31m"Check the customer and cart information."[39m
+
+[36m [2m❯[22m src/utils/orderErrors.test.js:[2m13:39[22m[39m
+    [90m 11| [39m      details: { formErrors: [], fieldErrors: { email: ['Invalid email…
+    [90m 12| [39m    })[33m;[39m
+    [90m 13| [39m    expect(describeOrderError(error)).toBe('Check the customer and car…
+    [90m   | [39m                                      [31m^[39m
+    [90m 14| [39m  })[33m;[39m
+    [90m 15| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/orderErrors.test.js[2m > [22mdescribeOrderError[2m > [22mlists several fields in form order
+[31m[1mAssertionError[22m: expected -1 to be less than -1[39m
+[36m [2m❯[22m src/utils/orderErrors.test.js:[2m22:42[22m[39m
+    [90m 20| [39m    })[33m;[39m
+    [90m 21| [39m    [35mconst[39m message [33m=[39m [34mdescribeOrderError[39m(error)[33m;[39m
+    [90m 22| [39m    expect(message.indexOf('Full name')).toBeLessThan(message.indexOf(…
+    [90m   | [39m                                         [31m^[39m
+    [90m 23| [39m  })[33m;[39m
+    [90m 24| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/orderErrors.test.js[2m > [22mdescribeOrderError[2m > [22mdescribes a cart problem
+[31m[1mAssertionError[22m: expected 'Check the customer and cart informati…' to contain 'Cart:'[39m
+
+Expected: [32m"C[7mart:[27m"[39m
+Received: [31m"C[7mheck the customer and cart information.[27m"[39m
+
+[36m [2m❯[22m src/utils/orderErrors.test.js:[2m29:39[22m[39m
+    [90m 27| [39m      code: 'INVALID_ORDER', details: { fieldErrors: { items: ['Too sm…
+    [90m 28| [39m    })[33m;[39m
+    [90m 29| [39m    [34mexpect[39m([34mdescribeOrderError[39m(error))[33m.[39m[34mtoContain[39m([32m'Cart:'[39m)[33m;[39m
+    [90m   | [39m                                      [31m^[39m
+    [90m 30| [39m  })[33m;[39m
+    [90m 31| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m3 failed[39m[22m[2m | [22m[1m[32m5 passed[39m[22m[90m (8)[39m
+[2m   Start at [22m 00:14:09
+[2m   Duration [22m 660ms[2m (transform 49ms, setup 0ms, collect 65ms, tests 15ms, environment 0ms, prepare 416ms)[22m
+
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path C:\Shopmart\Shop-Mart-EggDroids\frontend
+npm error workspace shopsmart-frontend@1.0.0
+npm error location C:\Shopmart\Shop-Mart-EggDroids\frontend
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c vitest run
+[4db7eef5-bc72-4b8b-8689-fc2b69fdda17] PrismaClientUnknownRequestError: 
+Invalid `prisma.product.findFirst()` invocation:
+
+
+Error occurred during query execution:
+ConnectorError(ConnectorError { user_facing_error: None, kind: QueryError(Error { kind: ToSql(0), cause: Some(Error { kind: ConversionError("Unable to fit integer value '99999999999' into an INT4 (32-bit signed integer)."), original_code: None, original_message: None }) }), transient: false })
+    at ei.handleRequestError (C:\Shopmart\Shop-Mart-EggDroids\node_modules\@prisma\client\runtime\library.js:121:7458)
+    at ei.handleAndLogRequestError (C:\Shopmart\Shop-Mart-EggDroids\node_modules\@prisma\client\runtime\library.js:121:6593)
+    at ei.request (C:\Shopmart\Shop-Mart-EggDroids\node_modules\@prisma\client\runtime\library.js:121:6300)
+    at async a (C:\Shopmart\Shop-Mart-EggDroids\node_modules\@prisma\client\runtime\library.js:130:9551)
+    at async file:///C:/Shopmart/Shop-Mart-EggDroids/backend/src/routes/products.js:28:21 {
+  clientVersion: '6.19.3'
+}
+GET /api/products/99999999999 500 61.165 ms
+✖ GET /api/products/:id with an id beyond the integer range returns 400, not 500 (115.3061ms)
+✖ an order item id beyond the integer range fails validation (2.9151ms)
+[71d74791-fd60-4525-81f6-1ae57f4cf58d] PrismaClientUnknownRequestError: 
+Invalid `prisma.product.findMany()` invocation:
+
+
+Error occurred during query execution:
+ConnectorError(ConnectorError { user_facing_error: None, kind: QueryError(Error { kind: ToSql(0), cause: Some(Error { kind: ConversionError("Unable to fit integer value '99999999999' into an INT4 (32-bit signed integer)."), original_code: None, original_message: None }) }), transient: false })
+    at ei.handleRequestError (C:\Shopmart\Shop-Mart-EggDroids\node_modules\@prisma\client\runtime\library.js:121:7458)
+    at ei.handleAndLogRequestError (C:\Shopmart\Shop-Mart-EggDroids\node_modules\@prisma\client\runtime\library.js:121:6593)
+    at ei.request (C:\Shopmart\Shop-Mart-EggDroids\node_modules\@prisma\client\runtime\library.js:121:6300)
+    at async a (C:\Shopmart\Shop-Mart-EggDroids\node_modules\@prisma\client\runtime\library.js:130:9551)
+    at async file:///C:/Shopmart/Shop-Mart-EggDroids/backend/src/routes/orders.js:13:22 {
+  clientVersion: '6.19.3'
+}
+POST /api/orders 500 3.838 ms
+✖ POST /api/orders with an id beyond the integer range returns 422, not 500 (38.8583ms)
+[undefined] SyntaxError: Expected property name or '}' in JSON at position 1 (line 1 column 2)
+    at JSON.parse (<anonymous>)
+    at parse (C:\Shopmart\Shop-Mart-EggDroids\node_modules\body-parser\lib\types\json.js:91:21)
+    at C:\Shopmart\Shop-Mart-EggDroids\node_modules\body-parser\lib\read.js:162:18
+    at AsyncResource.runInAsyncScope (node:async_hooks:214:14)
+    at invokeCallback (C:\Shopmart\Shop-Mart-EggDroids\node_modules\raw-body\index.js:238:16)
+    at done (C:\Shopmart\Shop-Mart-EggDroids\node_modules\raw-body\index.js:227:7)
+    at IncomingMessage.onEnd (C:\Shopmart\Shop-Mart-EggDroids\node_modules\raw-body\index.js:287:7)
+    at IncomingMessage.emit (node:events:508:28)
+    at endReadableNT (node:internal/streams/readable:1701:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+  expose: true,
+  statusCode: 400,
+  status: 400,
+  body: '{bad json',
+  type: 'entity.parse.failed'
+}
+✖ malformed JSON returns 400 INVALID_JSON with a customer-safe message (6.4464ms)
+✖ escapeLikePattern makes LIKE wildcards literal (0.4212ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 0
+ℹ fail 5
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 713.4823
+
+✖ failing tests:
+
+test at test\apiErrors.test.js:31:1
+✖ GET /api/products/:id with an id beyond the integer range returns 400, not 500 (115.3061ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  500 !== 400
+  
+      at TestContext.<anonymous> (file:///C:/Shopmart/Shop-Mart-EggDroids/backend/test/apiErrors.test.js:33:10)
+      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:358:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 500,
+    expected: 400,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test\apiErrors.test.js:37:1
+✖ an order item id beyond the integer range fails validation (2.9151ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at TestContext.<anonymous> (file:///C:/Shopmart/Shop-Mart-EggDroids/backend/test/apiErrors.test.js:39:10)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1106:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:788:18)
+      at Test.postRun (node:internal/test_runner/test:1235:19)
+      at Test.run (node:internal/test_runner/test:1163:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:358:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test\apiErrors.test.js:42:1
+✖ POST /api/orders with an id beyond the integer range returns 422, not 500 (38.8583ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  500 !== 422
+  
+      at TestContext.<anonymous> (file:///C:/Shopmart/Shop-Mart-EggDroids/backend/test/apiErrors.test.js:46:10)
+      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 500,
+    expected: 422,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test\apiErrors.test.js:51:1
+✖ malformed JSON returns 400 INVALID_JSON with a customer-safe message (6.4464ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'INTERNAL_ERROR'
+  - 'INVALID_JSON'
+       ^
+  
+      at TestContext.<anonymous> (file:///C:/Shopmart/Shop-Mart-EggDroids/backend/test/apiErrors.test.js:54:10)
+      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'INTERNAL_ERROR',
+    expected: 'INVALID_JSON',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test\apiErrors.test.js:59:1
+✖ escapeLikePattern makes LIKE wildcards literal (0.4212ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  '%' !== '\\%'
+  
+      at TestContext.<anonymous> (file:///C:/Shopmart/Shop-Mart-EggDroids/backend/test/apiErrors.test.js:60:10)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1106:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:788:18)
+      at Test.postRun (node:internal/test_runner/test:1235:19)
+      at Test.run (node:internal/test_runner/test:1163:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '%',
+    expected: '\\%',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
