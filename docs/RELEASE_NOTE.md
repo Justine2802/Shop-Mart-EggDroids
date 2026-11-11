@@ -90,6 +90,6 @@ Run on 2026-11-12 at about 17:30 UTC against the Render URLs above, with fiction
 
 | Member | Test run | Contribution | Issue they can explain |
 | --- | --- | --- | --- |
-| Calma, Wendy | _e.g. T2 Cart totals_ | _…_ | _e.g. L2 stale cart stock vs. the server stock check_ |
-| Esguerra, Justine | _e.g. T3 Checkout_ | _…_ | _e.g. DEFECT-01 generic validation message_ |
-| Magar, Harman | _e.g. T6 Failure / AI outage_ | _…_ | _e.g. DEFECT-02 INTEGER overflow → 500_ |
+| Calma, Wendy | T2 Cart: add, +/−, typed quantity above stock, remove; totals ₱3,550 → ₱9,350 → ₱8,700. T4 Stock conflict (409, cart unchanged) | Recorded the test results in the test record. Fixed DEFECT-04 (search wildcards `%` and `_`) | L2: the cart keeps the stock figure from when an item was added, but the server re-checks stock in a transaction, so overselling cannot happen |
+| Esguerra, Justine | T3 Checkout with valid and invalid details (`juan@localhost` rejected, then orders #6 and #7). Staging smoke test on Render | Fixed DEFECT-01 (checkout names the rejected field). Deployed to Render (static site, web service, Postgres) and added `trust proxy` for production | DEFECT-01: the browser accepts `juan@localhost` as an email, but the server's validator does not, so the page must show the server's field errors |
+| Magar, Harman | T5 Assistant questions and T6 Failure: AI provider outage fallback and API stopped | Fixed DEFECT-02 (ids beyond the INTEGER range → 400/422 instead of 500) and DEFECT-03 (`INVALID_JSON`). Wrote the deployment plan and diagram | DEFECT-02: `99999999999` is larger than PostgreSQL's INTEGER maximum (2,147,483,647), so Prisma failed with a 500 until the validator capped it |
