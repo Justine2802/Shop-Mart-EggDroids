@@ -1,8 +1,11 @@
-# ShopSmart release note: local release candidate
+# ShopSmart release note: release candidate on private staging
 
-- **Version:** 1.0.1-rc1. Based on commit `5025e85` (`feature/grounded-assistant`) plus the quality fixes in this submission. Record the final commit hash after committing.
+- **Version:** 1.0.1-rc1. Commits `59f4904` (quality fixes and docs) and `c293c5a` (trust Render's proxy in production), branch `feature/grounded-assistant`.
 - **Date:** 2026-11-12
-- **Deployment status:** **Local release candidate only.** No hosting or database was approved, so **live staging was not completed**. See [DEPLOYMENT_PLAN.md](DEPLOYMENT_PLAN.md) for the planned layout.
+- **Deployment status:** **Private staging on Render**, smoke test passed on 2026-11-12 (see "Staging smoke test" below). Live AI drafting is **not** enabled on staging, because no `GEMINI_API_KEY` is set there; the assistant answers from catalog rules.
+  - Frontend: https://shop-mart-eggdroids-1.onrender.com
+  - API health: https://shop-mart-eggdroids.onrender.com/api/health
+  - Layout and configuration: [DEPLOYMENT_PLAN.md](DEPLOYMENT_PLAN.md)
 
 ## Verified working features
 
@@ -34,7 +37,8 @@ There are 9 new regression tests. `npm run check` passes: lint, 8 frontend tests
 - **Cart is not persisted.** A page refresh empties it.
 - **The cart stock figure can be stale.** The server still prevents overselling.
 - **Multi-word search** ("usb lamp") matches the whole phrase only.
-- **Rate limiting** needs `trust proxy` before any hosted deployment (see the deployment plan).
+- **Render free plan:** the API sleeps when idle, so the first request after a pause can take up to about a minute. Open `/api/health` before a demo.
+- **Staging is reachable by anyone with the URL** and has no sign-in. Share the URL privately and use fictional data only.
 
 ## Local startup for an evaluator
 
@@ -64,6 +68,23 @@ On 2026-11-12, after the fixes:
 | Data preserved | Orders 1–3 from before testing are still present (7 orders in total). No reseed was run |
 | Secrets | Only `.env.example` files are tracked. `frontend/dist` contains no key, `DATABASE_URL` or password, only the public `http://localhost:3000/api` |
 | Privacy | Only fictional names and `@example.com` emails were used |
+
+## Staging smoke test
+
+Run on 2026-11-12 at about 17:30 UTC against the Render URLs above, with fictional data only.
+
+| Check | Result |
+| --- | --- |
+| `GET /api/health` | `{"status":"ok"}`, HTTP 200 |
+| Frontend reaches the intended API | The deployed bundle calls `https://shop-mart-eggdroids.onrender.com/api`, not `localhost`. Products load: 6 cards |
+| Search | "keyboard" → 1 product; `%` → none (DEFECT-04 fix is live) |
+| Error handling | Product id `99999999999` → 400; malformed JSON → 400 `INVALID_JSON` with `traceId` |
+| Cart → checkout | USB-C Study Lamp ×1. `juan@localhost` rejected with "Email address: enter a valid email address…". Corrected email → **order #1, ₱900.00** ([screenshot](evidence/staging-checkout-order-1.jpg)). Lamp stock 10 → 9 in the database |
+| Assistant | "I need a webcam under 1500 pesos" → 1080p Webcam ₱1,450 with source; "Do you sell drones?" → honest no match. Mode `rules`, notice "AI drafting is not configured on this server…" |
+| CORS | API answers with `Access-Control-Allow-Origin: https://shop-mart-eggdroids-1.onrender.com` only |
+| SPA reload | `/cart` returns 200 (rewrite works) |
+| Orders privacy | `GET /api/orders` → 404; no route returns customer records |
+| Secrets | The deployed JS bundle contains no key, `DATABASE_URL` or Postgres URL. `DATABASE_URL` is set only in the Render API service settings |
 
 ## Team record
 

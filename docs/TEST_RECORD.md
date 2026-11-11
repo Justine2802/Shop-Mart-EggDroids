@@ -127,6 +127,10 @@ Not applicable: no authentication exists. `GET /api/orders` and `GET /api/orders
 
 Before the fixes, all 8 new tests failed: 3 frontend and 5 backend. The fixes were not yet in place, and placeholder helpers kept the old behaviour. Log: [evidence/regression-tests-before-fix.log](evidence/regression-tests-before-fix.log). After the fixes, `npm run check` passed: **8 frontend + 49 backend tests**, lint and build OK. Log: [evidence/final-check.log](evidence/final-check.log). The fixes did not delete or weaken any existing test.
 
+### Staging repeat (Render, 2026-11-12)
+
+The fixes were repeated on https://shop-mart-eggdroids-1.onrender.com: `%` search → none, id `99999999999` → 400, malformed JSON → 400 `INVALID_JSON`, and `juan@localhost` at checkout → field-specific message. A valid checkout then created staging order #1 (₱900). Full table: [RELEASE_NOTE.md](RELEASE_NOTE.md#staging-smoke-test).
+
 ### Known unresolved issues
 
 | ID | Impact | Safe temporary limitation |
