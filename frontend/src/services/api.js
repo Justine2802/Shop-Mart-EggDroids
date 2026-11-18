@@ -5,6 +5,8 @@ async function request(path, { timeoutMs, ...options } = {}) {
   try {
     response = await fetch(`${API_URL}${path}`, {
       ...options,
+      // Send the session cookie. Same-origin hosting needs nothing else; a split host also needs CORS credentials.
+      credentials: 'include',
       headers: { 'Content-Type': 'application/json', ...options.headers },
       signal: timeoutMs ? AbortSignal.timeout(timeoutMs) : undefined
     });
@@ -17,7 +19,7 @@ async function request(path, { timeoutMs, ...options } = {}) {
     throw error;
   }
 
-  const data = await response.json().catch(() => null);
+  const data = response.status === 204 ? null : await response.json().catch(() => null);
   if (!response.ok) {
     const message = data?.error?.message || `Request failed with status ${response.status}.`;
     const error = new Error(message);
@@ -33,6 +35,12 @@ export const api = {
   getProducts: (query = '') => request(`/products${query ? `?search=${encodeURIComponent(query)}` : ''}`),
   getProduct: (id) => request(`/products/${id}`),
   createOrder: (order) => request('/orders', { method: 'POST', body: JSON.stringify(order) }),
+  getOrders: () => request('/orders'),
+  getOrder: (id) => request(`/orders/${id}`),
+  getCurrentUser: () => request('/auth/me'),
+  register: (account) => request('/auth/register', { method: 'POST', body: JSON.stringify(account) }),
+  login: (credentials) => request('/auth/login', { method: 'POST', body: JSON.stringify(credentials) }),
+  logout: () => request('/auth/logout', { method: 'POST' }),
   askAssistant: (question) => request('/assistant/questions', {
     // Longer than the server's provider timeout, so the server fallback normally wins,
     // but the page can never wait forever.

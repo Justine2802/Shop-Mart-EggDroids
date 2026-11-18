@@ -21,7 +21,7 @@ export default [
     }
   },
   {
-    files: ['src/context/CartContext.jsx'],
+    files: ['src/context/CartContext.jsx', 'src/context/AuthContext.jsx'],
     rules: { 'react-refresh/only-export-components': 'off' }
   }
 ];
