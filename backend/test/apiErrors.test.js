@@ -39,12 +39,14 @@ test('an order item id beyond the integer range fails validation', () => {
   assert.equal(result.success, false);
 });
 
-test('POST /api/orders with an id beyond the integer range returns 422, not 500', async () => {
+// Orders now require sign-in, so a guest is refused before validation runs. The schema test above
+// still guards DEFECT-02 for signed-in customers.
+test('POST /api/orders from a guest returns 401 AUTH_REQUIRED, not 500', async () => {
   const { status, body } = await call('/api/orders', {
     method: 'POST', body: JSON.stringify({ ...validOrder, items: [{ productId: 99999999999, quantity: 1 }] })
   });
-  assert.equal(status, 422);
-  assert.equal(body.error.code, 'INVALID_ORDER');
+  assert.equal(status, 401);
+  assert.equal(body.error.code, 'AUTH_REQUIRED');
 });
 
 // DEFECT-03: malformed JSON was labelled INTERNAL_ERROR and echoed the parser message.

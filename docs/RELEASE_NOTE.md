@@ -32,13 +32,13 @@ There are 9 new regression tests. `npm run check` passes: lint, 8 frontend tests
 
 ## Known limitations
 
-- **No authentication or roles.** Anyone who can reach the API can place a simulated order. There is no route that reads orders back. Use fictional data only.
+- **Customer sign-in, but no roles.** Customers can register, sign in, and read only their own orders (`feature/customer-auth`). There is no admin or staff role, no password reset and no email verification. Use fictional data only.
 - **Live AI not verified in this session.** Gemini integration is present (server-side key), but the local `.env` deliberately points at a closed port to test the outage path. To see AI-drafted answers, remove the `GEMINI_BASE_URL` line from `backend/.env` and set a valid `GEMINI_API_KEY`.
 - **Cart is not persisted.** A page refresh empties it.
 - **The cart stock figure can be stale.** The server still prevents overselling.
 - **Multi-word search** ("usb lamp") matches the whole phrase only.
 - **Render free plan:** the API sleeps when idle, so the first request after a pause can take up to about a minute. Open `/api/health` before a demo.
-- **Staging is reachable by anyone with the URL** and has no sign-in. Share the URL privately and use fictional data only.
+- **Staging is reachable by anyone with the URL.** Anyone can create a test account. Share the URL privately and use fictional data only.
 
 ## Local startup for an evaluator
 

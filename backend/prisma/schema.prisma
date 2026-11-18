@@ -30,6 +30,33 @@ model Order {
   total        Decimal     @db.Decimal(10, 2)
   createdAt    DateTime    @default(now())
   items        OrderItem[]
+  // Nullable so orders placed before sign-in existed are kept (they simply have no owner).
+  userId       Int?
+  user         User?       @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+}
+
+model User {
+  id           Int       @id @default(autoincrement())
+  email        String    @unique
+  name         String
+  passwordHash String
+  createdAt    DateTime  @default(now())
+  orders       Order[]
+  sessions     Session[]
+}
+
+// Server-side sessions. The browser cookie holds a random token; only its SHA-256 hash is stored.
+model Session {
+  id        Int      @id @default(autoincrement())
+  tokenHash String   @unique
+  userId    Int
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
 
 model OrderItem {

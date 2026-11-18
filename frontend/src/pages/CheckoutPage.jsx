@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import SignInPrompt from '../components/SignInPrompt.jsx';
+import { useAuth } from '../context/AuthContext.jsx';
 import { Link } from 'react-router-dom';
 import StatusMessage from '../components/StatusMessage.jsx';
 import { useCart } from '../context/CartContext.jsx';
@@ -8,7 +10,9 @@ import { describeOrderError } from '../utils/orderErrors.js';
 
 export default function CheckoutPage() {
   const { cart, total, clearCart } = useCart();
-  const [form, setForm] = useState({ customerName: '', email: '', address: '' });
+  const { user, checking } = useAuth();
+  // Start from the signed-in customer's details; they can still edit the delivery name and email.
+  const [form, setForm] = useState({ customerName: user?.name ?? '', email: user?.email ?? '', address: '' });
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
   const [order, setOrder] = useState(null);
@@ -41,11 +45,16 @@ export default function CheckoutPage() {
       <h1>Thank you, {order.customerName}!</h1>
       <p>Your simulated order number is <strong>#{order.id}</strong>.</p>
       <p>Total: <strong>₱{Number(order.total).toLocaleString('en-PH', { minimumFractionDigits: 2 })}</strong></p>
-      <Link className="button" to="/">Continue shopping</Link>
+      <div className="button-row">
+        <Link className="button" to={`/orders/${order.id}`}>View order</Link>
+        <Link className="button secondary" to="/">Continue shopping</Link>
+      </div>
     </section>
   );
 
   if (cart.length === 0) return <section><div className="empty-state"><h1>Your cart is empty</h1><Link className="button" to="/">Browse products</Link></div></section>;
+  if (checking) return <section><StatusMessage>Checking your session…</StatusMessage></section>;
+  if (!user) return <SignInPrompt title="Sign in to check out">Your cart is kept while you sign in. Orders are saved to your account so only you can view them.</SignInPrompt>;
 
   return (
     <section className="checkout-layout">
